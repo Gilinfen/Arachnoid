@@ -1,5 +1,6 @@
 import { invoke } from '@tauri-apps/api'
 import './App.css'
+import Verify from '../components/verify'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       >
         <h1>激活</h1>
       </button>
+      <Verify />
     </div>
   )
 }

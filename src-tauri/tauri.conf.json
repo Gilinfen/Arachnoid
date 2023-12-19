@@ -28,7 +28,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "resources": ["../public_key.pem"]
+      "resources": ["../pythonrc", "../settings.json", "../public_key.pem"]
     },
     "security": {
       "csp": null

@@ -38,8 +38,9 @@ fn main() {
                     // 初始化 settings
                     config::init_settings(&val1.handle());
                 },
-                |_| {
+                |val2| {
                     info!("应用启动");
+                    config::init_settings(&val2.handle());
                     // config::init_settings(&app.handle());
                     let _ = pystart::activate_python_venv();
                 },

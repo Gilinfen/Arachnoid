@@ -3,14 +3,16 @@ from selenium.webdriver.chrome.service import Service
 import json
 
 # 打开并读取JSON文件
-with open('./settings.json', 'r') as file:
-    data = json.load(file)
+# with open('./settings.json', 'r') as file:
+#     data = json.load(file)
 
 # 打印读取的数据
-print(f"chromedriver：{data['chromedriver']}")
+# print(f"chromedriver：{data['chromedriver']}")
+# chromedriver_path = data["chromedriver"]
+chromedriver_path = '/Users/Fox/Code/Rust/Arachnoid/python/chromedriver'
 
 # 指定 chromedriver 的路径
-service = Service(data["chromedriver"])
+service = Service(chromedriver_path)
 driver = webdriver.Chrome(service=service)
 driver.get('http://www.baidu.com')
 driver.implicitly_wait(10)
