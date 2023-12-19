@@ -1,0 +1,90 @@
+use std::fs::File;
+
+use base64::{engine::general_purpose, Engine as _};
+use rsa::{pkcs8::DecodePublicKey, Pkcs1v15Sign, RsaPublicKey};
+use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
+use tauri::AppHandle;
+
+use crate::public::uuid::get_uuid;
+
+use super::{
+    lib::{get_app_data_dir, get_resource_path, read_json, update_json},
+    window,
+};
+
+fn get_activate_path(app_handle: &AppHandle) -> String {
+    let data_path = get_app_data_dir(&app_handle);
+    data_path
+        .join("activate.json")
+        .to_string_lossy()
+        .to_string()
+}
+
+// 使用公钥验证签名
+pub fn verify_signature(app_handle: &AppHandle, data: &str, signature: &str) -> bool {
+    let vec_data = data.as_bytes().to_vec();
+    let vec_signature = signature.as_bytes().to_vec();
+
+    let pub_key_path = get_resource_path(app_handle, "../public_key.pem");
+    let pub_key = RsaPublicKey::read_public_key_pem_file(pub_key_path).expect("读取公钥失败");
+
+    let dencoed = general_purpose::STANDARD_NO_PAD.decode(&vec_signature);
+    match dencoed {
+        Ok(dencoed_val) => {
+            let mut hasher = Sha256::new(); // 创建 SHA-256 哈希实例
+            hasher.update(vec_data); // 对数据进行哈希处理
+            let hashed_data = hasher.finalize();
+
+            // 验证签名
+            pub_key
+                .verify(Pkcs1v15Sign::new_unprefixed(), &hashed_data, &dencoed_val)
+                .is_ok()
+        }
+        Err(_) => false,
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct VerifyData {
+    pub user_info: String,
+    pub signature: String,
+}
+
+#[tauri::command]
+pub fn use_verify_signature(app_handle: AppHandle, data: &str, signature: &str) -> bool {
+    let uuid = get_uuid().expect("获取系统 UUID 失败");
+
+    if uuid != data {
+        return false;
+    }
+
+    let verify_bool = verify_signature(&app_handle, &data, &signature);
+
+    if verify_bool {
+        let data_path_str = get_activate_path(&app_handle);
+        let ver_data = VerifyData {
+            user_info: data.to_string(),
+            signature: signature.to_string(),
+        };
+
+        // 保存数据
+        let _ = File::create(&data_path_str);
+        let _ = update_json(&data_path_str, &ver_data);
+        window::app_ready(app_handle.clone());
+    }
+    verify_bool
+}
+
+pub fn get_verify_signature(app_handle: &AppHandle) -> bool {
+    let data_path_str = get_activate_path(&app_handle);
+
+    let verify_json = read_json::<VerifyData>(&data_path_str);
+    match verify_json {
+        Ok(p) => verify_signature(&app_handle, &p.user_info, &p.signature),
+        Err(e) => {
+            println!("{:?}", e);
+            false
+        }
+    }
+}
