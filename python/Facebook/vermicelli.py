@@ -20,7 +20,7 @@ import json
 # print(f"chromedriver：{data['chromedriver']}")
 # chromedriver_path = data["chromedriver"]
 chromedriver_path = '/Users/Fox/Code/Rust/Arachnoid/python/chromedriver'
-utl = "https://www.facebook.com/jl.ukay.shoes.supplier"
+utl = "https://www.facebook.com/andreijames.diaz"
 
 # 指定 chromedriver 的路径
 service = Service(chromedriver_path)
@@ -46,8 +46,11 @@ def web_driver_wait_button_click(utl, timeout=10):
     return button
 
 
+# 打开粉丝页面
 driver.execute_script(f"window.location.href = '{utl}/followers';")
-web_driver_wait_button_click('/html/body/div[5]')
+
+# 点击蒙板
+web_driver_wait_button_click('//div[@class="__fb-light-mode x1n2onr6 x1vjfegm"]',30)
 
 
 # 获取用户 ID
@@ -66,70 +69,56 @@ def extract_facebook_id_or_username(url):
         return None  # 如果不匹配，返回 None
 
 
-def wait_for_child_element(parent, child_locator, timeout=10):
-    try:
-        WebDriverWait(parent, timeout).until(
-            lambda x: len(parent.find_elements(*child_locator)) > 0
-        )
-        return parent.find_element(*child_locator)
-    except TimeoutException:
-        return None
-
-
 # 设置显式等待
-wait = WebDriverWait(driver, 60)
-trigger_element_xpath = "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div/div/div/div/div/div/div/div/div[3]"
+wait = WebDriverWait(driver, 10)
+# 底部加载触发元素
+trigger_element_xpath = "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div/div/div/div/div/div/div/div/div[3]/div[contains(@class, 'xh8yej3')]"
+# 列表父元素
 parent_div = driver.find_element("xpath",
                                  "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div/div/div/div/div/div/div/div/div[3]")
-
-processed_ids = set()  # 用来跟踪已处理的元素ID
 
 
 def get_elem_info():
     return driver.find_elements("xpath",
-                                "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div/div/div/div/div/div/div/div/div[3]/div")  # 替换为列表项的 XPath
+                                "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div/div/div/div/div/div/div/div/div[3]/div[contains(@class, 'x6s0dn4')]")  # 替换为列表项的 XPath
 
-def wait_until_condition_met(timeout=60):
-    start_time = time.time()
-    previous_len = 0
+processed_ids = set()  # 用来跟踪已处理的元素ID、
 
-    while True:
-        elements_list = get_elem_info()
-        current_len = len(elements_list)
+# 示例：对象数组（字典的列表）
+object_array = [
+]
 
-        if current_len >= previous_len:
-            print(current_len)
-            return True  # 条件满足，返回 True
-
-        if time.time() - start_time > timeout:
-            return False  # 超时，返回 False
-
-        previous_len = current_len
-        time.sleep(1)
-
-is_falg = True
-while is_falg:
+while True:
+    # 滚动到页面底部
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    if not wait_until_condition_met():
-        # 如果条件没有满足（例如超时），则退出外层循环
+
+    try:
+        # 滚动到触发元素
+        wait.until(EC.presence_of_element_located((By.XPATH, trigger_element_xpath)))
+
+        # 提取页面数据
+        elements = get_elem_info()  # 替换为列表项的 XPath
+        for element in elements:
+            element_href = element.find_element("xpath", "./div[1]/a").get_attribute('href')  # 或者其他能唯一标识元素的属性
+            element_id = extract_facebook_id_or_username(element_href)
+            user_data = {
+                "name": element.find_element("xpath", "./div[2]").text,
+                "icon": element.find_element("xpath", "./div[1]/a/img").get_attribute('src'),
+                "id": element_id,
+                "home_page": element_href,
+                "description": element.find_element("xpath", "./div[3]").text,
+                "chat": "https://www.facebook.com/messages/t/" + element_id
+            }
+            if element_id not in processed_ids:
+                processed_ids.add(element_id)
+                object_array.append(user_data)
+                # 将对象数组写入 JSON 文件
+                with open("data.json", "w") as file:
+                    json.dump(object_array, file, indent=4)
+
+    except TimeoutException:
+        # 如果超时，可能已经到达页面底部或加载了所有内容
         break
-    # # 这里是条件满足时继续执行的代码
-    time.sleep(10)
-    for element in get_elem_info():
-        element_href = element.find_element("xpath", "./div[1]/a").get_attribute('href')
-        element_id = extract_facebook_id_or_username(element_href)
-        user_data = {
-            "name": element.find_element("xpath", "./div[2]/div[1]").text,
-            "icon": element.find_element("xpath", "./div[1]/a/img").get_attribute('src'),
-            "id": element_id,
-            "home_page": element_href,
-            "description": element.find_element("xpath", "./div[2]/div[2]").text,
-            "chat": "https://www.facebook.com/messages/t/" + element_id
-        }
-        if element_id not in processed_ids:
-            processed_ids.add(element_id)
-            # 处理 user_data...
-            print(user_data)
 
-
+print(len(processed_ids))
 driver.quit()
