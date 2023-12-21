@@ -1,4 +1,3 @@
-import time
 import re
 
 from selenium import webdriver
@@ -36,9 +35,11 @@ password_input = driver.find_element("xpath",
 username_input.send_keys("glinfen@gmail.com")  # 替换为你的用户名
 
 password_input.send_keys("951299034.glf")  # 替换为你的密码
+
 driver.find_element("xpath", '//*[@id="login_popup_cta_form"]/div/div[5]/div/div').click()
 
 
+# 等待 元素显示
 def web_driver_wait_button_click(utl, timeout=10):
     wait = WebDriverWait(driver, timeout)
     button = wait.until(EC.element_to_be_clickable((By.XPATH, utl)))
@@ -51,7 +52,6 @@ driver.execute_script(f"window.location.href = '{utl}/followers';")
 
 # 点击蒙板
 web_driver_wait_button_click('//div[@class="__fb-light-mode x1n2onr6 x1vjfegm"]',30)
-
 
 # 获取用户 ID
 def extract_facebook_id_or_username(url):
@@ -85,8 +85,7 @@ def get_elem_info():
 processed_ids = set()  # 用来跟踪已处理的元素ID、
 
 # 示例：对象数组（字典的列表）
-object_array = [
-]
+object_array = []
 
 while True:
     # 滚动到页面底部
@@ -120,5 +119,4 @@ while True:
         # 如果超时，可能已经到达页面底部或加载了所有内容
         break
 
-print(len(processed_ids))
 driver.quit()
