@@ -3,6 +3,8 @@
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
+use std::env;
+
 use log::info;
 use public::verify;
 use python::{chorme_v, pystart};
@@ -12,12 +14,13 @@ mod globalstate;
 mod public;
 mod python;
 mod utils;
+use dotenv::dotenv;
 
 fn main() {
+    dotenv().ok(); // 加载 .env 文件
+
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            pystart::execute_python_script,
-            pystart::init_python_path,
             chorme_v::get_chrome_version_command,
             chorme_v::download_chromedriver,
             config::update_json_command,

@@ -1,6 +1,7 @@
-use std::fs::File;
+use std::{env, fs::File};
 
 use base64::{engine::general_purpose, Engine as _};
+use log::info;
 use rsa::{pkcs8::DecodePublicKey, Pkcs1v15Sign, RsaPublicKey};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -9,7 +10,7 @@ use tauri::AppHandle;
 use crate::public::uuid::get_uuid;
 
 use super::{
-    lib::{get_app_data_dir, get_resource_path, read_json, update_json},
+    lib::{decode_str, get_app_data_dir, read_json, update_json, ACCREDIT_PUBLIC_KEY_PEM},
     window,
 };
 
@@ -22,12 +23,26 @@ fn get_activate_path(app_handle: &AppHandle) -> String {
 }
 
 // 使用公钥验证签名
-pub fn verify_signature(app_handle: &AppHandle, data: &str, signature: &str) -> bool {
+pub fn verify_signature(data: &str, signature: &str) -> bool {
     let vec_data = data.as_bytes().to_vec();
     let vec_signature = signature.as_bytes().to_vec();
 
-    let pub_key_path = get_resource_path(app_handle, "../public_key.pem");
-    let pub_key = RsaPublicKey::read_public_key_pem_file(pub_key_path).expect("读取公钥失败");
+    // let pub_key_path = get_resource_path(app_handle, "../public_key.pem");
+    // let pub_key = RsaPublicKey::read_public_key_pem_file(pub_key_path).expect("读取公钥失败");
+
+    let public_key_pem = ACCREDIT_PUBLIC_KEY_PEM;
+    let public_key_pem_code =
+        env::var("ACCREDIT_PUBLIC_KEY_PEM").expect("ACCREDIT_PUBLIC_KEY_PEM not set");
+
+    let public_key_pem2 = decode_str(public_key_pem_code);
+
+    // match env::var("ACCREDIT_PUBLIC_KEY_PEM") {
+    //     Ok(val) => println!("ACCREDIT_PUBLIC_KEY_PEM: {}", val),
+    //     Err(e) => println!("Couldn't read ACCREDIT_PUBLIC_KEY_PEM ({})", e),
+    // }
+
+    // 从字符串中解析公钥
+    let pub_key = RsaPublicKey::from_public_key_pem(&public_key_pem).expect("解析公钥失败");
 
     let dencoed = general_purpose::STANDARD_NO_PAD.decode(&vec_signature);
     match dencoed {
@@ -59,7 +74,7 @@ pub fn use_verify_signature(app_handle: AppHandle, data: &str, signature: &str) 
         return false;
     }
 
-    let verify_bool = verify_signature(&app_handle, &data, &signature);
+    let verify_bool = verify_signature(&data, &signature);
 
     if verify_bool {
         let data_path_str = get_activate_path(&app_handle);
@@ -81,7 +96,7 @@ pub fn get_verify_signature(app_handle: &AppHandle) -> bool {
 
     let verify_json = read_json::<VerifyData>(&data_path_str);
     match verify_json {
-        Ok(p) => verify_signature(&app_handle, &p.user_info, &p.signature),
+        Ok(p) => verify_signature(&p.user_info, &p.signature),
         Err(e) => {
             println!("{:?}", e);
             false

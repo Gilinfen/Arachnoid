@@ -63,7 +63,7 @@ function App() {
           const time1 = +new Date()
           await tyInvoke('execute_python_script', {
             cmdType: 'Python',
-            pyFile: 'sele.py',
+            pyFile: './vermicelli/sele.py',
           })
           const time2 = +new Date()
           setTimes(time2 - time1)
