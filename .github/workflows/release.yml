@@ -51,7 +51,7 @@ jobs:
         if: matrix.platform == 'windows-latest'
         run: |
           cd python
-          Compress-Archive -Path ./python/dist -DestinationPath pydist.zip
+          Compress-Archive -Path ./dist -DestinationPath pydist.zip
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
