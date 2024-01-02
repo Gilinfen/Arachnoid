@@ -90,6 +90,7 @@ dependencies = [
  "tauri",
  "tauri-build",
  "tokio",
+ "walkdir",
  "zip",
 ]
 

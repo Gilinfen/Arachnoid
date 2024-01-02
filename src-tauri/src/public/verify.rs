@@ -1,7 +1,6 @@
-use std::{env, fs::File};
+use std::fs::File;
 
 use base64::{engine::general_purpose, Engine as _};
-use log::info;
 use rsa::{pkcs8::DecodePublicKey, Pkcs1v15Sign, RsaPublicKey};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -10,7 +9,7 @@ use tauri::AppHandle;
 use crate::public::uuid::get_uuid;
 
 use super::{
-    lib::{decode_str, get_app_data_dir, read_json, update_json, ACCREDIT_PUBLIC_KEY_PEM},
+    lib::{get_app_data_dir, read_json, unzip_python, update_json, ACCREDIT_PUBLIC_KEY_PEM},
     window,
 };
 
@@ -31,10 +30,10 @@ pub fn verify_signature(data: &str, signature: &str) -> bool {
     // let pub_key = RsaPublicKey::read_public_key_pem_file(pub_key_path).expect("读取公钥失败");
 
     let public_key_pem = ACCREDIT_PUBLIC_KEY_PEM;
-    let public_key_pem_code =
-        env::var("ACCREDIT_PUBLIC_KEY_PEM").expect("ACCREDIT_PUBLIC_KEY_PEM not set");
+    // let public_key_pem_code =
+    //     env::var("ACCREDIT_PUBLIC_KEY_PEM").expect("ACCREDIT_PUBLIC_KEY_PEM not set");
 
-    let public_key_pem2 = decode_str(public_key_pem_code);
+    // let public_key_pem2 = decode_str(public_key_pem_code);
 
     // match env::var("ACCREDIT_PUBLIC_KEY_PEM") {
     //     Ok(val) => println!("ACCREDIT_PUBLIC_KEY_PEM: {}", val),
@@ -67,11 +66,15 @@ pub struct VerifyData {
 }
 
 #[tauri::command]
-pub fn use_verify_signature(app_handle: AppHandle, data: &str, signature: &str) -> bool {
+pub async fn use_verify_signature(
+    app_handle: AppHandle,
+    data: &str,
+    signature: &str,
+) -> Result<bool, String> {
     let uuid = get_uuid().expect("获取系统 UUID 失败");
 
     if uuid != data {
-        return false;
+        return Ok(false);
     }
 
     let verify_bool = verify_signature(&data, &signature);
@@ -87,8 +90,11 @@ pub fn use_verify_signature(app_handle: AppHandle, data: &str, signature: &str) 
         let _ = File::create(&data_path_str);
         let _ = update_json(&data_path_str, &ver_data);
         window::app_ready(app_handle.clone());
+
+        // 解压 python
+        let _ = unzip_python().await;
     }
-    verify_bool
+    Ok(verify_bool)
 }
 
 pub fn get_verify_signature(app_handle: &AppHandle) -> bool {

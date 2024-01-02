@@ -3,11 +3,12 @@ use tauri::Manager;
 use self::verify::get_verify_signature;
 
 mod install;
-mod lib;
+pub mod lib;
 pub mod logger;
 pub mod uuid;
 pub mod verify;
 pub mod window;
+mod zip;
 
 //
 pub fn public_setup<F, S>(app: &mut tauri::App, flrst: F, start_app: S)

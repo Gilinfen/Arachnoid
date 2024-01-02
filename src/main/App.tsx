@@ -47,42 +47,17 @@ function App() {
       <Button onClick={updateSe}>修改 Settings</Button>
       <h1>{chormeV}</h1>
       <Chrome />
-      <h2>Python：3.11.5</h2>
-      <Button
-        onClick={async () => {
-          const time1 = +new Date()
-          await tyInvoke('init_python_path')
-          const time2 = +new Date()
-          setTimes(time2 - time1)
-        }}
-      >
-        设置 Python 环境
-      </Button>
       <Button
         onClick={async () => {
           const time1 = +new Date()
           await tyInvoke('execute_python_script', {
-            cmdType: 'Python',
-            pyFile: './vermicelli/sele.py',
+            cmdType: 'python',
           })
           const time2 = +new Date()
           setTimes(time2 - time1)
         }}
       >
         测试Python
-      </Button>
-      <Button
-        onClick={async () => {
-          const time1 = +new Date()
-          await tyInvoke('execute_python_script', {
-            cmdType: 'Pip',
-            pyFile: '',
-          })
-          const time2 = +new Date()
-          setTimes(time2 - time1)
-        }}
-      >
-        安装依赖
       </Button>
       <p>耗时：{times / 1000} s</p>
       <LogViewer />

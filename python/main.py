@@ -4,7 +4,12 @@ import sys
 from license_verification import verify_license
 
 def main():
-    # if len(sys.argv) < 3:
+    # 检查参数数量
+    if len(sys.argv) <= 1:
+        print("No arguments provided. Running default operation.")
+        # 在这里可以放置默认操作
+        return
+    
     #     print("Usage: python main.py [app1|app2] [license_key]")
     #     sys.exit(1)
 

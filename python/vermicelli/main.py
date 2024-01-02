@@ -4,11 +4,6 @@
 # 按 双击 ⇧ 在所有地方搜索类、文件、工具窗口、操作和设置。
 import json
 import os
-import sele
-
-def sele_main():
-    sele.main()
-
 def json_main():
     # 获取当前工作目录
     current_directory = os.getcwd()

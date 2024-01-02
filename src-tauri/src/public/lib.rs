@@ -2,12 +2,18 @@ use std::{
     fs::{self, File},
     io::{self, Read},
     path::PathBuf,
+    process::Command,
+    str,
 };
 
-use base64::{engine::general_purpose, Engine as _};
+use log::info;
 use serde::{de::DeserializeOwned, Serialize};
 use tauri::api::path::app_data_dir;
 use tauri::AppHandle;
+
+use crate::utils::resolve_resource_path;
+
+use super::zip::unzip_file;
 
 /// 读取 json
 pub fn read_json<T: DeserializeOwned>(file_path: &str) -> io::Result<T> {
@@ -51,15 +57,67 @@ Cb+eStom+1nPBJ78kaGXvQUYgr3GzKbR/6MEiZvyAoX+9+fN2/YnPO7wA91ruy7Y
 FQIDAQAB
 -----END PUBLIC KEY-----"#;
 
-pub fn decode_str(base_code: String) -> String {
-    let decoded_bytes = general_purpose::STANDARD_NO_PAD
-        .decode(&base_code)
-        .expect("解码失败");
+/// 运行终端指令
+pub async fn run_command(
+    command: &str,
+    args: &[&str],
+    res_dir: Option<&str>,
+) -> Result<String, String> {
+    let mut command = Command::new(command);
+    command.args(args);
 
-    let pem_str = std::str::from_utf8(&decoded_bytes);
-
-    match pem_str {
-        Ok(p) => p.to_owned(),
-        Err(e) => format!("无法转换为UTF-8字符串：{}", e),
+    if let Some(dir) = res_dir {
+        command.current_dir(dir);
     }
+
+    let output = command.output();
+
+    match output {
+        Ok(o) => {
+            if o.status.success() {
+                let output_str = match str::from_utf8(&o.stdout) {
+                    Ok(s) => s.trim().to_string(),
+                    Err(_) => "Failed to parse output".to_string(),
+                };
+                info!("SUCCESS: {}", output_str);
+                Ok(output_str)
+            } else {
+                let err_str = match str::from_utf8(&o.stderr) {
+                    Ok(s) => s.trim().to_string(),
+                    Err(_) => "Unknown error".to_string(),
+                };
+                info!("ERROR: {}", err_str);
+                Err(err_str)
+            }
+        }
+        Err(e) => Err(e.to_string()),
+    }
+}
+
+/// 通用的函数，允许传入不同的命令
+// pub async fn find_command_path(command_name: &str) -> Result<String, String> {
+//     let command = if cfg!(target_os = "windows") {
+//         "where"
+//     } else {
+//         "which"
+//     };
+
+//     run_command(command, &[command_name], None).await
+// }
+
+// 解压 python 可执行文件
+pub async fn unzip_python() -> Result<(), Box<dyn std::error::Error>> {
+    // 使用示例
+    let red_dir = resolve_resource_path("../");
+    let unzip_dst = red_dir.clone() + "/pydist.zip"; // 解压目标目录
+    let zip_dir = red_dir.clone() + "/";
+
+    if let Err(e) = unzip_file(&unzip_dst, &zip_dir) {
+        println!("Error decompressing file: {}", e);
+        return Ok(());
+    }
+    let test_python = zip_dir + "/python/dist/main/main";
+    let _ = run_command("chmod", &["+x", &test_python], None).await?;
+    let _ = run_command(&test_python, &[""], None).await?;
+    Ok(())
 }

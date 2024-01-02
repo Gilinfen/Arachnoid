@@ -3,3 +3,4 @@ venv
 chromedriver
 Downloaded
 data.db
+*.spec

@@ -1,7 +1,4 @@
-use crate::{
-    config::{read_json_command, update_json_command},
-    utils::run_command,
-};
+use crate::config::{read_json_command, update_json_command};
 use log::info;
 use reqwest;
 use serde::{Deserialize, Serialize};
@@ -20,6 +17,8 @@ use zip::ZipArchive;
 
 #[cfg(target_os = "macos")]
 async fn get_chrome_version() -> Result<String, String> {
+    use crate::public::lib::run_command;
+
     let chrome_path_output = Command::new("mdfind")
         .arg("kMDItemCFBundleIdentifier == 'com.google.Chrome'")
         .output()

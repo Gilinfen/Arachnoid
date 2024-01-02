@@ -7,7 +7,7 @@ use std::env;
 
 use log::info;
 use public::verify;
-use python::{chorme_v, pystart};
+use python::{chorme_v, py_start};
 
 mod config;
 mod globalstate;
@@ -23,6 +23,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             chorme_v::get_chrome_version_command,
             chorme_v::download_chromedriver,
+            py_start::execute_python_script,
             config::update_json_command,
             config::read_json_command,
             config::get_os_info,
@@ -45,7 +46,6 @@ fn main() {
                     info!("应用启动");
                     config::init_settings(&val2.handle());
                     // config::init_settings(&app.handle());
-                    let _ = pystart::activate_python_venv();
                 },
             );
             Ok(())

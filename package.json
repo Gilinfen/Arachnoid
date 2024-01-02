@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "pyc": "python3 ./convert.py && python3 ./cryp.py",
     "pybuild": "pyinstaller --onefile --distpath ./py_build/dist --workpath ./py_build/build   ./python/main.py ",
     "build": "tsc && vite build",
     "preview": "vite preview",
