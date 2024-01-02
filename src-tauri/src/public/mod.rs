@@ -5,7 +5,6 @@ use self::verify::get_verify_signature;
 mod install;
 pub mod lib;
 pub mod logger;
-pub mod uuid;
 pub mod verify;
 pub mod window;
 mod zip;

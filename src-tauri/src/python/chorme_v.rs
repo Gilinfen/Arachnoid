@@ -47,6 +47,7 @@ fn get_chrome_version() -> Result<String, String> {
             "/v",
             "version",
         ],
+        None,
     )
     .or_else(|_| Err("Failed to get Chrome version on Windows".into()))
 }

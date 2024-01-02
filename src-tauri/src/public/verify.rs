@@ -1,12 +1,11 @@
 use std::fs::File;
 
 use base64::{engine::general_purpose, Engine as _};
+use log::info;
 use rsa::{pkcs8::DecodePublicKey, Pkcs1v15Sign, RsaPublicKey};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use tauri::AppHandle;
-
-use crate::public::uuid::get_uuid;
 
 use super::{
     lib::{get_app_data_dir, read_json, unzip_python, update_json, ACCREDIT_PUBLIC_KEY_PEM},
@@ -71,14 +70,7 @@ pub async fn use_verify_signature(
     data: &str,
     signature: &str,
 ) -> Result<bool, String> {
-    let uuid = get_uuid().expect("获取系统 UUID 失败");
-
-    if uuid != data {
-        return Ok(false);
-    }
-
     let verify_bool = verify_signature(&data, &signature);
-
     if verify_bool {
         let data_path_str = get_activate_path(&app_handle);
         let ver_data = VerifyData {

@@ -4,7 +4,7 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
-# 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
+# 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
 jobs:
   release:
     permissions:

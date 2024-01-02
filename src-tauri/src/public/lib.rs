@@ -111,9 +111,10 @@ pub async fn unzip_python() -> Result<(), Box<dyn std::error::Error>> {
     let red_dir = resolve_resource_path("../");
     let unzip_dst = red_dir.clone() + "/pydist.zip"; // 解压目标目录
     let zip_dir = red_dir.clone() + "/";
-
+    info!("unzip_dst:{}", unzip_dst);
+    info!("zip_dir:{}", zip_dir);
     if let Err(e) = unzip_file(&unzip_dst, &zip_dir) {
-        println!("Error decompressing file: {}", e);
+        info!("Error decompressing file: {}", e);
         return Ok(());
     }
     let test_python = zip_dir + "/python/dist/main/main";
