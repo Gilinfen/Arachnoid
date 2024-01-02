@@ -44,14 +44,12 @@ jobs:
       - name: Zip the output (macOS)
         if: matrix.platform == 'macos-latest'
         run: |
-          cd python
-          zip -r pydist.zip ./dist
+          zip -r pydist.zip ./python/dist
 
       - name: Zip the output (Windows)
         if: matrix.platform == 'windows-latest'
         run: |
-          cd python
-          Compress-Archive -Path ./dist -DestinationPath pydist.zip
+          Compress-Archive -Path ./python/dist -DestinationPath pydist.zip
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
