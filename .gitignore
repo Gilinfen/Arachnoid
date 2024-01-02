@@ -22,10 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.zip
 
 pythonrc
 pythonenc
 venv
 build
 py_build
-.zip
