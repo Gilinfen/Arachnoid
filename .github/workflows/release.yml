@@ -36,9 +36,19 @@ jobs:
       # 编译 python 文件
       - name: Compiling python files
         run: |
-          pip install -r python/requirements.txt
+          pip install -r ./python/requirements.txt
           pyinstaller -D ./python/main.py
-          zip -r pydist.zip python/dist
+
+        # 根据平台进行压缩
+      - name: Zip the output (macOS)
+        if: matrix.platform == 'macos-latest'
+        run: |
+          zip -r pydist.zip ./python/dist
+
+      - name: Zip the output (Windows)
+        if: matrix.platform == 'windows-latest'
+        run: |
+          Compress-Archive -Path ./python/dist -DestinationPath pydist.zip
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
