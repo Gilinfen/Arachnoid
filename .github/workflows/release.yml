@@ -38,6 +38,7 @@ jobs:
         run: |
           pip install -r python/requirements.txt
           pyinstaller -D ./python/main.py
+          zip -r pydist.zip python/dist
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
