@@ -38,9 +38,9 @@
         "label": "main",
         "fullscreen": false,
         "resizable": true,
+        "visible": false,
         "title": "arachnoid",
         "url": "/indexHtml/main.html",
-        "visible": false,
         "width": 800,
         "height": 600
       },
