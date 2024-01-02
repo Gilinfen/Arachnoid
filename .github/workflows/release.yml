@@ -39,6 +39,9 @@ jobs:
           pip install -r ./python/requirements.txt
           pyinstaller -D ./python/main.py
 
+      - name: List contents of the dist directory
+        run: ls
+
         # 根据平台进行压缩
       - name: Zip the output (macOS)
         if: matrix.platform == 'macos-latest'
