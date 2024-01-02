@@ -7,15 +7,10 @@ import LogViewer from '../components/log'
 
 function App() {
   const [times, setTimes] = useState(0)
-  const [chormeV, setChormeV] = useState('')
   const [settings, setSettings] = useState<any>()
   const [python_path, setpython_path] = useState('')
 
   const init_fun = async () => {
-    await tyInvoke('get_chrome_version_command')
-      .then((res: any) => setChormeV(res))
-      .catch(() => setChormeV(''))
-
     await tyInvoke('read_json_command')
       .then((res: any) => setSettings(res))
       .catch(() => setSettings(''))
@@ -45,7 +40,6 @@ function App() {
         onChange={(e) => setpython_path(e.target.value)}
       />
       <Button onClick={updateSe}>修改 Settings</Button>
-      <h1>{chormeV}</h1>
       <Chrome />
       <Button
         onClick={async () => {

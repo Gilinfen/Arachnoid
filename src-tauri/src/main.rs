@@ -21,7 +21,6 @@ fn main() {
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            chorme_v::get_chrome_version_command,
             chorme_v::download_chromedriver,
             py_start::execute_python_script,
             config::update_json_command,

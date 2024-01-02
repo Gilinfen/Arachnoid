@@ -1,7 +1,6 @@
 use std::fs::File;
 
 use base64::{engine::general_purpose, Engine as _};
-use log::info;
 use rsa::{pkcs8::DecodePublicKey, Pkcs1v15Sign, RsaPublicKey};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -81,10 +80,11 @@ pub async fn use_verify_signature(
         // 保存数据
         let _ = File::create(&data_path_str);
         let _ = update_json(&data_path_str, &ver_data);
-        window::app_ready(app_handle.clone());
 
         // 解压 python
         let _ = unzip_python().await;
+
+        window::app_ready(app_handle.clone());
     }
     Ok(verify_bool)
 }

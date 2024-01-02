@@ -1,5 +1,4 @@
 use crate::config::{read_json_command, update_json_command};
-use crate::public::lib::run_command;
 use log::info;
 use reqwest;
 use serde::{Deserialize, Serialize};
@@ -9,64 +8,11 @@ use std::{
     fs::{self, File},
     io::copy,
     path::{Path, PathBuf},
-    process::Command,
     str,
 };
 use tauri::{AppHandle, Manager};
 use tokio::spawn;
 use zip::ZipArchive;
-
-#[cfg(target_os = "macos")]
-async fn get_chrome_version() -> Result<String, String> {
-    let chrome_path_output = Command::new("mdfind")
-        .arg("kMDItemCFBundleIdentifier == 'com.google.Chrome'")
-        .output()
-        .map_err(|e| e.to_string())?;
-
-    if !chrome_path_output.status.success() {
-        return Err("Failed to locate Google Chrome on macOS".into());
-    }
-
-    let chrome_path = str::from_utf8(&chrome_path_output.stdout)
-        .unwrap_or("")
-        .lines()
-        .next()
-        .unwrap_or("");
-
-    let chrome_command = format!("{}/Contents/MacOS/Google Chrome", chrome_path);
-    run_command(&chrome_command, &["--version"], None).await
-}
-
-#[cfg(target_os = "windows")]
-fn get_chrome_version() -> Result<String, String> {
-    run_command(
-        "reg",
-        &[
-            "query",
-            "\"HKEY_CURRENT_USER\\Software\\Google\\Chrome\\BLBeacon\"",
-            "/v",
-            "version",
-        ],
-        None,
-    )
-    .or_else(|_| Err("Failed to get Chrome version on Windows".into()))
-}
-
-#[cfg(not(any(target_os = "windows", target_os = "macos")))]
-fn get_chrome_version() -> Result<String, String> {
-    Err("Unsupported operating system".into())
-}
-
-// chorme 版本
-#[tauri::command]
-pub async fn get_chrome_version_command() -> Result<String, String> {
-    let version: Result<String, String> = get_chrome_version().await;
-    // match &version {
-    //     Ok(v) => info!("Chrome version: {}", v),
-    //     Err(e) => info!("Error getting Chrome version: {}", e),
-    // }
-    version
-}
 
 // 获取 chrome/chromedriver url
 fn get_file_url(osval: &str, position: &str, files: &str) -> String {
