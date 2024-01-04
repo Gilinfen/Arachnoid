@@ -41,13 +41,13 @@
           font-size: 8px;
         }
         .clear {
-          background-color: #ed6a5e;
+          background: linear-gradient(#ed675a, #ed695e, #ec6b60);
         }
         .minification {
-          background-color: #f5c04f;
+          background: linear-gradient(#f5c350, #f4bf4e, #f6c351);
         }
         .blow—up {
-          background-color: #61c654;
+          background: linear-gradient(#63ca55, #62c454, #63ca56);
         }
       }
     }
@@ -60,7 +60,7 @@
     }
     .context {
       background-color: #fff;
-      height: 100%;
+      height: calc(100vh - 30px);
     }
   }
 }

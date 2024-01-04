@@ -13,20 +13,23 @@ edition = "2021"
 tauri-build = { version = "1.5", features = [] }
 
 [dependencies]
-tauri = { version = "1.5", features = [ "window-all", "macos-private-api", "dialog-open", "shell-open"] }
+tauri = { version = "1.5", features = [
+    "window-all",
+    "macos-private-api",
+    "dialog-open",
+    "shell-open",
+] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 log = { version = "0.4.20", features = ["std"] }
-lazy_static = "1.4.0"
 once_cell = "*"
-reqwest = "0.11"                                       # 检查最新版本
-zip = "0.6.6"                                          # 检查最新版本
-tokio = { version = "1", features = ["full"] }         # 检查最新版本
+reqwest = "0.11" # 检查最新版本
+zip = "0.6.6" # 检查最新版本
+tokio = { version = "1", features = ["full"] } # 检查最新版本
 dotenv = "0.15.0"
-rsa = "0.9.6"                                          # 使用 rsa 库，版本 0.4.0
-sha2 = "0.10.8"                                        # 用于哈希的 sha2 库
+rsa = "0.9.6" # 使用 rsa 库，版本 0.4.0
+sha2 = "0.10.8" # 用于哈希的 sha2 库
 base64 = "0.21.5"
-walkdir = "2"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
