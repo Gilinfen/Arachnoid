@@ -42,9 +42,8 @@ fn main() {
                     // 初始化 settings
                     config::init_settings(&val1.handle());
                 },
-                |val2| {
+                |_| {
                     println!("应用启动");
-                    config::init_settings(&val2.handle());
                     // config::init_settings(&app.handle());
                 },
                 |_| {
