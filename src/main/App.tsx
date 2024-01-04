@@ -19,6 +19,8 @@ function App() {
 
   useEffect(() => {
     init_fun()
+    // 页面加载完成后通知 Tauri 显示窗口
+    tyInvoke('app_ready')
   }, [])
 
   const updateSe = async () => {

@@ -21,7 +21,8 @@ where
     if get_verify_signature(&app.handle()) {
         println!("激活成功");
         active(app);
-        window::app_ready(app.handle().clone());
+        // 如果前端控制就注释这个
+        // window::app_ready(app.handle().clone());
     } else {
         println!("激活失败");
         if let Some(activate_window) = app.get_window("activate") {

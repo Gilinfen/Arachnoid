@@ -10,6 +10,7 @@ export type InvokeFn = {
   read_json_command: string
   get_os_info: string
   use_verify_signature: string
+  app_ready: string
 }
 
 export const tyInvoke = async <T>(
