@@ -61,7 +61,3 @@ def create_xls_with_dropdown(base_path,target_path):
     workbook.save(output_file)
     return output_file
 
-# 示例用法:
-# base_path = '/path/to/source/directories'  # 使用实际路径替换
-# output_file = create_xls_with_dropdown(base_path)
-# print(f"带下拉列表的Excel文件已创建于 {output_file}")
