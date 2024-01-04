@@ -1,4 +1,7 @@
-use crate::utils::{read_json, update_json};
+use crate::{
+    public::lib::{read_json, update_json},
+    utils::resolve_resource_path,
+};
 use log::info;
 use tauri::AppHandle;
 
@@ -22,12 +25,14 @@ pub struct JsonData {
 
 #[tauri::command]
 pub fn read_json_command() -> Result<JsonData, String> {
-    read_json::<JsonData>("../settings.json").map_err(|e| e.to_string())
+    let file_path = resolve_resource_path("../settings.json");
+    read_json::<JsonData>(&file_path).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 pub fn update_json_command(data: JsonData) -> Result<(), String> {
-    update_json(&data, "../settings.json").map_err(|e| e.to_string())
+    let file_path = resolve_resource_path("../settings.json");
+    update_json(&file_path, &data).map_err(|e| e.to_string())
 }
 
 /// 获取系统信息

@@ -5,7 +5,6 @@
 
 use std::env;
 
-use log::info;
 use public::verify;
 use python::{chorme_v, py_start};
 
@@ -15,6 +14,8 @@ mod public;
 mod python;
 mod utils;
 use dotenv::dotenv;
+
+use crate::python::py_start::unzip_python;
 
 fn main() {
     dotenv().ok(); // 加载 .env 文件
@@ -37,14 +38,18 @@ fn main() {
             public::public_setup(
                 app,
                 |val1| {
-                    info!("首次执行安装");
+                    println!("首次执行安装");
                     // 初始化 settings
                     config::init_settings(&val1.handle());
                 },
                 |val2| {
-                    info!("应用启动");
+                    println!("应用启动");
                     config::init_settings(&val2.handle());
                     // config::init_settings(&app.handle());
+                },
+                |_| {
+                    println!("激活成功");
+                    let _ = unzip_python();
                 },
             );
             Ok(())

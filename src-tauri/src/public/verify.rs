@@ -4,10 +4,12 @@ use base64::{engine::general_purpose, Engine as _};
 use rsa::{pkcs8::DecodePublicKey, Pkcs1v15Sign, RsaPublicKey};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-use tauri::AppHandle;
+use tauri::{AppHandle, Manager};
+
+use crate::python::py_start::unzip_python;
 
 use super::{
-    lib::{get_app_data_dir, read_json, unzip_python, update_json, ACCREDIT_PUBLIC_KEY_PEM},
+    lib::{get_app_data_dir, read_json, update_json, ACCREDIT_PUBLIC_KEY_PEM},
     window,
 };
 
@@ -64,7 +66,7 @@ pub struct VerifyData {
 }
 
 #[tauri::command]
-pub async fn use_verify_signature(
+pub fn use_verify_signature(
     app_handle: AppHandle,
     data: &str,
     signature: &str,
@@ -81,9 +83,11 @@ pub async fn use_verify_signature(
         let _ = File::create(&data_path_str);
         let _ = update_json(&data_path_str, &ver_data);
 
-        // 解压 python
-        let _ = unzip_python().await;
-
+        // 关闭加载窗口
+        if let Some(loading_window) = &app_handle.get_window("activate") {
+            loading_window.close().unwrap();
+        }
+        let _ = unzip_python();
         window::app_ready(app_handle.clone());
     }
     Ok(verify_bool)

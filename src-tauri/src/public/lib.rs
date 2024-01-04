@@ -11,10 +11,6 @@ use serde::{de::DeserializeOwned, Serialize};
 use tauri::api::path::app_data_dir;
 use tauri::AppHandle;
 
-use crate::utils::resolve_resource_path;
-
-use super::zip::unzip_file;
-
 /// 读取 json
 pub fn read_json<T: DeserializeOwned>(file_path: &str) -> io::Result<T> {
     let mut file = File::open(file_path)?;
@@ -35,17 +31,6 @@ pub fn get_app_data_dir(app_handle: &AppHandle) -> PathBuf {
     app_data_dir(&app_handle.config()).expect("msg")
 }
 
-// pub fn get_resource_path(app_handle: &AppHandle, resource_path: &str) -> String {
-//     // 生产路径
-//     app_handle
-//         .path_resolver()
-//         .resolve_resource(resource_path)
-//         .expect("failed to resolve resource")
-//         .to_str()
-//         .unwrap()
-//         .to_string()
-// }
-
 // 获取授权公钥匙
 pub const ACCREDIT_PUBLIC_KEY_PEM: &str = r#"-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs2EL0Qo4czxE4kPSRX7P
@@ -57,12 +42,19 @@ Cb+eStom+1nPBJ78kaGXvQUYgr3GzKbR/6MEiZvyAoX+9+fN2/YnPO7wA91ruy7Y
 FQIDAQAB
 -----END PUBLIC KEY-----"#;
 
+/// 通用的函数，允许传入不同的命令
+// pub async fn find_command_path(command_name: &str) -> Result<String, String> {
+//     let command = if cfg!(target_os = "windows") {
+//         "where"
+//     } else {
+//         "which"
+//     };
+
+//     run_command(command, &[command_name], None).await
+// }
+
 /// 运行终端指令
-pub async fn run_command(
-    command: &str,
-    args: &[&str],
-    res_dir: Option<&str>,
-) -> Result<String, String> {
+pub fn run_command(command: &str, args: &[&str], res_dir: Option<&str>) -> Result<String, String> {
     let mut command = Command::new(command);
     command.args(args);
 
@@ -92,33 +84,4 @@ pub async fn run_command(
         }
         Err(e) => Err(e.to_string()),
     }
-}
-
-/// 通用的函数，允许传入不同的命令
-// pub async fn find_command_path(command_name: &str) -> Result<String, String> {
-//     let command = if cfg!(target_os = "windows") {
-//         "where"
-//     } else {
-//         "which"
-//     };
-
-//     run_command(command, &[command_name], None).await
-// }
-
-// 解压 python 可执行文件
-pub async fn unzip_python() -> Result<(), Box<dyn std::error::Error>> {
-    // 使用示例
-    let red_dir = resolve_resource_path("../");
-    let unzip_dst = red_dir.clone() + "/pydist.zip"; // 解压目标目录
-    let zip_dir = red_dir.clone() + "/";
-    info!("unzip_dst:{}", unzip_dst);
-    info!("zip_dir:{}", zip_dir);
-    if let Err(e) = unzip_file(&unzip_dst, &zip_dir) {
-        info!("Error decompressing file: {}", e);
-        return Ok(());
-    }
-    let test_python = zip_dir + "/python/dist/main/main";
-    let _ = run_command("chmod", &["+x", &test_python], None).await?;
-    let _ = run_command(&test_python, &[""], None).await?;
-    Ok(())
 }

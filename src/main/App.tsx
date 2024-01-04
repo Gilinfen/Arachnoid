@@ -4,6 +4,7 @@ import './App.css'
 import { tyInvoke } from '../invoke'
 import Chrome from '../components/chrome'
 import LogViewer from '../components/log'
+import PythonCmd from './components/python'
 
 function App() {
   const [times, setTimes] = useState(0)
@@ -41,11 +42,22 @@ function App() {
       />
       <Button onClick={updateSe}>修改 Settings</Button>
       <Chrome />
+
+      <PythonCmd
+        title="处理产品目录"
+        cmdType="-pm"
+        cmdList={['产品目录', '目标目录']}
+      />
+      <PythonCmd
+        title="处理成 Excel 文件"
+        cmdType="-pmxls"
+        cmdList={['产品目录', '目标目录']}
+      />
       <Button
         onClick={async () => {
           const time1 = +new Date()
           await tyInvoke('execute_python_script', {
-            cmdType: 'python',
+            cmds: ['app1'],
           })
           const time2 = +new Date()
           setTimes(time2 - time1)

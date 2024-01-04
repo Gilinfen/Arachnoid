@@ -7,19 +7,21 @@ pub mod lib;
 pub mod logger;
 pub mod verify;
 pub mod window;
-mod zip;
+pub mod zip;
 
-//
-pub fn public_setup<F, S>(app: &mut tauri::App, flrst: F, start_app: S)
+// 生命周期
+pub fn public_setup<F, S, A>(app: &mut tauri::App, flrst: F, start_app: S, active: A)
 where
     F: FnOnce(&mut tauri::App),
     S: FnOnce(&mut tauri::App),
+    A: FnOnce(&mut tauri::App),
 {
     // 注册日志监听
     logger::configure_logging(app.handle().clone());
 
     if get_verify_signature(&app.handle()) {
         println!("激活成功");
+        active(app);
         window::app_ready(app.handle().clone());
     } else {
         println!("激活失败");

@@ -1,10 +1,5 @@
 use crate::globalstate::APP_HANDLE;
-use serde::{de::DeserializeOwned, Serialize};
-use std::{
-    fs::{self, File},
-    io::{self, Read},
-    str,
-};
+use std::str;
 
 /// 路径转换
 pub fn resolve_resource_path(resource_path: &str) -> String {
@@ -18,22 +13,4 @@ pub fn resolve_resource_path(resource_path: &str) -> String {
         .to_str()
         .unwrap()
         .to_string()
-}
-
-/// 读取 json
-pub fn read_json<T: DeserializeOwned>(file_name: &str) -> io::Result<T> {
-    let file_path = resolve_resource_path(file_name);
-    let mut file = File::open(file_path)?;
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
-    let data: T = serde_json::from_str(&contents)?;
-    Ok(data)
-}
-
-/// 修改 json
-pub fn update_json<T: Serialize>(data: &T, file_name: &str) -> io::Result<()> {
-    let file_path = resolve_resource_path(file_name);
-    let contents = serde_json::to_string(data)?;
-    fs::write(file_path, contents)?;
-    Ok(())
 }

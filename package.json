@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "pybuild": "pyinstaller --onefile --distpath ./py_build/dist --workpath ./py_build/build   ./python/main.py ",
+    "pybuild": "zip -r pydist.zip  ./python/dist",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",

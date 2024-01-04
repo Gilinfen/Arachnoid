@@ -15,6 +15,10 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "dialog": {
+        "all": false,
+        "open": true
       }
     },
     "bundle": {
@@ -39,7 +43,7 @@
         "fullscreen": false,
         "resizable": true,
         "visible": false,
-        "title": "arachnoid",
+        "title": "Arachnoid",
         "url": "/indexHtml/main.html",
         "width": 800,
         "height": 600

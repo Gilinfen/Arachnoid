@@ -1,4 +1,4 @@
-# license_verification.py
+# 验证身份
 
 import requests
 
