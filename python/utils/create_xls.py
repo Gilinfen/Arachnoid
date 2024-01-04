@@ -3,6 +3,17 @@ import os
 from openpyxl import Workbook
 from openpyxl.worksheet.datavalidation import DataValidation
 
+def add_data_validation(worksheet, validation_type, formula, column, df_length):
+    # Create data validation object
+    data_validation = DataValidation(type=validation_type, formula1=formula, allow_blank=True)
+    
+    # Define the range for the data validation
+    range_to_apply = f'{column}2:{column}{df_length + 1}'
+
+    # Add data validation to the worksheet
+    data_validation.add(range_to_apply)
+    worksheet.add_data_validation(data_validation)
+
 def create_xls_with_dropdown(base_path,target_path):
     # 定义数据框架的列
     columns = ["图片路径", "标题", "价格", "类目", "状况", "描述", "存货状况", "地点", "对朋友隐藏"]
@@ -43,19 +54,23 @@ def create_xls_with_dropdown(base_path,target_path):
     with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
         df.to_excel(writer, index=False)
         workbook = writer.book
-
-        # 创建带有下拉列表的数据验证对象
-        dv = DataValidation(type="list", formula1='"隐藏,不隐藏"', allow_blank=True)
         
         # 获取工作表
         worksheet = workbook.active
 
-        # 定义应用下拉列表的单元格范围
-        dv_range = f'I2:I{len(df) + 1}'
-        dv.add(dv_range)
+        # Sample data frame length (replace with actual df length)
+        df_length = len(df)  # Replace with the actual length of your dataframe
 
-        # 将数据验证添加到工作表
-        worksheet.add_data_validation(dv)
+        # Lists for data validation
+        hide_list = '"隐藏,不隐藏"'
+        condition_list = '"全新,二手 - 近全新,二手 - 良好,二手 - 普通"'
+        category_list = '"手表,其他"'
+
+        # Adding data validations
+        add_data_validation(worksheet, "list", hide_list, 'I', df_length)
+        add_data_validation(worksheet, "list", condition_list, 'E', df_length)
+        add_data_validation(worksheet, "list", category_list, 'D', df_length)
+
 
     # 保存文件
     workbook.save(output_file)
