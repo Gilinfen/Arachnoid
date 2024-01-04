@@ -1,8 +1,4 @@
 {
-  "python_path": "",
-  "pip_path": "",
-  "venv_python_path": "",
-  "venv_pip_path": "",
   "res_dir": "",
   "os_info": "",
   "chromedriver": ""

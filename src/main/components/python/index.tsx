@@ -1,4 +1,4 @@
-import { Button, Form, message } from 'antd'
+import { Button, Form, Input, message } from 'antd'
 import { tyInvoke } from '../../../invoke'
 import { open } from '@tauri-apps/api/dialog'
 
@@ -6,12 +6,13 @@ type FieldType = {
   [key: string]: string
 }
 
-type CmdType = '-pm' | '-pmxls'
-
 type PythonCmdType = {
   title: string
-  cmdType: CmdType
-  cmdList: string[]
+  cmdType: '-pm' | '-pmxls'
+  cmdList: {
+    type: 'text' | 'file'
+    name: string
+  }[]
 }
 
 const OpFileInput = ({ value, onChange }: any) => {
@@ -51,11 +52,11 @@ export default function PythonCmd({ cmdType, cmdList, title }: PythonCmdType) {
       <Form name="basic" onFinish={onFinish} autoComplete="off">
         {cmdList.map((item) => (
           <Form.Item<FieldType>
-            label={item}
-            name={item}
+            label={item.name}
+            name={item.name}
             rules={[{ required: true, message: 'Please input your username!' }]}
           >
-            <OpFileInput />
+            {item.type === 'file' ? <OpFileInput /> : <Input />}
           </Form.Item>
         ))}
         <Form.Item>

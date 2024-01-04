@@ -6,8 +6,6 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use tauri::{AppHandle, Manager};
 
-use crate::python::py_start::unzip_python;
-
 use super::{
     lib::{get_app_data_dir, read_json, update_json, ACCREDIT_PUBLIC_KEY_PEM},
     window,
@@ -87,7 +85,6 @@ pub fn use_verify_signature(
         if let Some(loading_window) = &app_handle.get_window("activate") {
             loading_window.close().unwrap();
         }
-        let _ = unzip_python();
         window::app_ready(app_handle.clone());
     }
     Ok(verify_bool)

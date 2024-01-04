@@ -7,7 +7,6 @@ pub mod lib;
 pub mod logger;
 pub mod verify;
 pub mod window;
-pub mod zip;
 
 // 生命周期
 pub fn public_setup<F, S, A>(app: &mut tauri::App, flrst: F, start_app: S, active: A)

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Button, Input } from 'antd'
-import './App.css'
 import { tyInvoke } from '../invoke'
 import Chrome from '../components/chrome'
 import LogViewer from '../components/log'
 import PythonCmd from './components/python'
+import './App.css'
 
 function App() {
   const [times, setTimes] = useState(0)
@@ -46,12 +46,34 @@ function App() {
       <PythonCmd
         title="处理产品目录"
         cmdType="-pm"
-        cmdList={['产品目录', '目标目录']}
+        cmdList={[
+          {
+            name: '产品目录',
+            type: 'file',
+          },
+          {
+            name: '目标目录',
+            type: 'file',
+          },
+          {
+            name: '删除字符',
+            type: 'text',
+          },
+        ]}
       />
       <PythonCmd
         title="处理成 Excel 文件"
         cmdType="-pmxls"
-        cmdList={['产品目录', '目标目录']}
+        cmdList={[
+          {
+            name: '产品目录',
+            type: 'file',
+          },
+          {
+            name: '目标目录',
+            type: 'file',
+          },
+        ]}
       />
       <Button
         onClick={async () => {

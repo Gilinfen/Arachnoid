@@ -32,7 +32,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "resources": ["../settings.json", "../pydist.zip"]
+      "resources": ["../settings.json", "../python/out"]
     },
     "security": {
       "csp": null

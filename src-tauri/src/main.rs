@@ -15,8 +15,6 @@ mod python;
 mod utils;
 use dotenv::dotenv;
 
-use crate::python::py_start::unzip_python;
-
 fn main() {
     dotenv().ok(); // 加载 .env 文件
 
@@ -49,7 +47,6 @@ fn main() {
                 },
                 |_| {
                     println!("激活成功");
-                    let _ = unzip_python();
                 },
             );
             Ok(())

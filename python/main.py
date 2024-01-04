@@ -26,10 +26,10 @@ def main():
     elif sys.argv[1] == 'app2':
         print("Running app2")
     elif sys.argv[1] == '-pm':
-        if len(sys.argv) < 3:
-            print("[base_path] [target_path]")
+        if len(sys.argv) < 4:
+            print("[base_path] [target_path] [remove_strings]")
             sys.exit(1)
-        copy_files_to_new_folders(sys.argv[2],sys.argv[3])
+        copy_files_to_new_folders(sys.argv[2],sys.argv[3],sys.argv[4])
     elif sys.argv[1] == '-pmxls':
         if len(sys.argv) < 3:
             print("[base_path] [target_path]")
