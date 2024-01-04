@@ -44,16 +44,7 @@ const LayoutCom: React.FC = () => {
 
   return (
     <Layout hasSider>
-      <Sider
-        style={{
-          overflow: 'auto',
-          height: '100vh',
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          bottom: 0,
-        }}
-      >
+      <Sider>
         <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
@@ -62,12 +53,17 @@ const LayoutCom: React.FC = () => {
           items={items}
         />
       </Sider>
-      <Layout style={{ marginLeft: 200 }}>
+      <Layout
+        style={{
+          height: 'calc(100vh - 30px)',
+        }}
+      >
         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <div
             style={{
               padding: 24,
               textAlign: 'center',
+              height: '100%',
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}

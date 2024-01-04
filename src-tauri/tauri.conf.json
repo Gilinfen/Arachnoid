@@ -10,6 +10,7 @@
     "version": "1.0.0"
   },
   "tauri": {
+    "macOSPrivateApi": true,
     "allowlist": {
       "all": false,
       "shell": {
@@ -19,6 +20,9 @@
       "dialog": {
         "all": false,
         "open": true
+      },
+      "window": {
+        "all": true
       }
     },
     "bundle": {
@@ -41,18 +45,24 @@
       {
         "label": "main",
         "fullscreen": false,
-        "resizable": true,
+        "resizable": false,
         "visible": false,
+        "decorations": false,
+        "fileDropEnabled": false,
         "title": "Arachnoid",
         "url": "/indexHtml/main.html",
-        "width": 800,
-        "height": 600
+        "width": 1200,
+        "height": 800,
+        "transparent": true
       },
       {
         "label": "activate",
         "fullscreen": false,
         "resizable": false,
         "visible": false,
+        "decorations": false,
+        "fileDropEnabled": false,
+        "transparent": true,
         "title": "激活",
         "url": "/indexHtml/activate.html",
         "width": 600,

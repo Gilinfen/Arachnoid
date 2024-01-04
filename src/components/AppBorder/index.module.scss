@@ -1,0 +1,66 @@
+.root {
+  border-radius: 10px;
+  overflow: hidden;
+  :global {
+    .header {
+      display: flex;
+      user-select: none;
+      width: 100%;
+      height: 30px;
+      background: #ffffff;
+      justify-content: space-between;
+    }
+    .controls {
+      display: flex;
+      width: 200px;
+      height: 100%;
+      justify-content: start;
+      align-items: center;
+      margin-left: 8px;
+      .items {
+        display: flex;
+        height: 100%;
+        justify-content: start;
+        align-items: center;
+        --opacity: 0;
+        svg {
+          opacity: var(--opacity);
+        }
+        &:hover {
+          --opacity: 1;
+        }
+        .item {
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          margin-right: 8px;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 8px;
+        }
+        .clear {
+          background-color: #ed6a5e;
+        }
+        .minification {
+          background-color: #f5c04f;
+        }
+        .blow—up {
+          background-color: #61c654;
+        }
+      }
+    }
+    .title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      font-weight: bold;
+    }
+    .context {
+      background-color: #fff;
+      height: 100%;
+    }
+  }
+}

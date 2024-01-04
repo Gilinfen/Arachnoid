@@ -1,19 +1,20 @@
 import { invoke } from '@tauri-apps/api'
 import { InvokeArgs } from '@tauri-apps/api/tauri'
 
-export type InvokeFn = {
-  execute_python_script: string
-  init_python_path: string
-  get_chrome_version_command: string
-  download_chromedriver: string
-  update_json_command: string
-  read_json_command: string
-  get_os_info: string
-  use_verify_signature: string
-  app_ready: string
-}
+export const InvokeFn = [
+  'execute_python_script',
+  'init_python_path',
+  'get_chrome_version_command',
+  'download_chromedriver',
+  'update_json_command',
+  'read_json_command',
+  'get_os_info',
+  'use_verify_signature',
+  'app_ready',
+  'close_app',
+] as const
 
 export const tyInvoke = async <T>(
-  cmd: keyof InvokeFn,
+  cmd: (typeof InvokeFn)[number],
   args?: InvokeArgs
 ): Promise<T> => invoke<T>(cmd, args)

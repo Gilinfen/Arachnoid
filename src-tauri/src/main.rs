@@ -5,7 +5,7 @@
 
 use std::env;
 
-use public::{verify, window};
+use public::{lib, verify, window};
 use python::{chorme_v, py_start};
 
 mod config;
@@ -26,6 +26,7 @@ fn main() {
             config::read_json_command,
             config::get_os_info,
             verify::use_verify_signature,
+            lib::close_app,
             window::app_ready,
         ])
         .setup(|app: &mut tauri::App| {

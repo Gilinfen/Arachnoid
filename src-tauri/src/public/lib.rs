@@ -85,3 +85,8 @@ pub fn run_command(command: &str, args: &[&str], res_dir: Option<&str>) -> Resul
         Err(e) => Err(e.to_string()),
     }
 }
+
+#[tauri::command]
+pub fn close_app() {
+    std::process::exit(0);
+}
