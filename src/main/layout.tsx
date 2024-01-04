@@ -13,13 +13,13 @@ const LayoutCom: React.FC = () => {
     () => [
       {
         icon: UserOutlined,
-        label: '签名',
+        label: '主页',
         link: rootPath,
       },
       {
         icon: UserOutlined,
-        label: '签名2',
-        link: writepath('/app1'),
+        label: '产品处理',
+        link: writepath('/product'),
       },
     ],
     []

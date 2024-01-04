@@ -3,7 +3,6 @@ import { Button, Input } from 'antd'
 import { tyInvoke } from '../invoke'
 import Chrome from '../components/chrome'
 import LogViewer from '../components/log'
-import PythonCmd from './components/python'
 import './App.css'
 
 function App() {
@@ -45,38 +44,6 @@ function App() {
       <Button onClick={updateSe}>修改 Settings</Button>
       <Chrome />
 
-      <PythonCmd
-        title="处理产品目录"
-        cmdType="-pm"
-        cmdList={[
-          {
-            name: '产品目录',
-            type: 'file',
-          },
-          {
-            name: '目标目录',
-            type: 'file',
-          },
-          {
-            name: '删除字符',
-            type: 'text',
-          },
-        ]}
-      />
-      <PythonCmd
-        title="处理成 Excel 文件"
-        cmdType="-pmxls"
-        cmdList={[
-          {
-            name: '产品目录',
-            type: 'file',
-          },
-          {
-            name: '目标目录',
-            type: 'file',
-          },
-        ]}
-      />
       <Button
         onClick={async () => {
           const time1 = +new Date()
