@@ -38,13 +38,7 @@ jobs:
         run: |
           cd python
           pip install -r ./requirements.txt
-          python3 \
-          -m nuitka \
-          --output-dir=out \
-          --show-progress \
-          --show-memory \
-          --include-module=utils \
-          ./main.py
+          python3 -m nuitka --output-dir=out --show-progress --show-memory --include-module=utils ./main.py
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
