@@ -7,14 +7,6 @@ use tauri::AppHandle;
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct JsonData {
-    /// python 路径
-    pub python_path: String,
-    /// pip 路径
-    pub pip_path: String,
-    /// python 虚拟环境路径
-    pub venv_python_path: String,
-    /// pip 虚拟环境路径
-    pub venv_pip_path: String,
     /// 资源目录
     pub res_dir: String,
     /// 系统信息
