@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Button, Input } from 'antd'
+import { Button, Input, message } from 'antd'
 import { tyInvoke } from '../invoke'
 import Chrome from '../components/chrome'
 import LogViewer from '../components/log'
 import './App.css'
+import { invoke } from '@tauri-apps/api'
+import { open } from '@tauri-apps/api/dialog'
 
 function App() {
   const [times, setTimes] = useState(0)
@@ -37,6 +39,21 @@ function App() {
       <h1>Settings</h1>
       <p>{settings?.python_path}</p>
       <p>{settings?.chromedriver}</p>
+      <Button
+        onClick={async () => {
+          const value = await open({
+            directory: true,
+          })
+
+          await invoke('create_xlsx', {
+            basePath: value,
+            filename: value + '/模版.xlsx',
+          })
+          message.success('成功')
+        }}
+      >
+        测试
+      </Button>
       <Input
         value={python_path}
         onChange={(e) => setpython_path(e.target.value)}

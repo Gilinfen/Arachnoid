@@ -5,6 +5,7 @@
 ```sh
 python3 \
 -m nuitka \
+--standalone \
 --output-dir=out \
 --show-progress \
 --show-memory \

@@ -16,3 +16,6 @@ def main():
     driver.find_element('id', 'su').click()
     time.sleep(5)
     driver.quit()
+
+if __name__ == "__main__":
+    main()

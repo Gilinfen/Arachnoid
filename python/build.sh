@@ -1,0 +1,1 @@
+pyinstaller -D -w ./vermicelli/sele.py -y

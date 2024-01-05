@@ -6,7 +6,7 @@
 use std::env;
 
 use public::{lib, verify, window};
-use python::{chorme_v, py_start};
+use python::{chorme_v, py_start, xlsx};
 
 mod config;
 mod globalstate;
@@ -26,6 +26,7 @@ fn main() {
             config::read_json_command,
             config::get_os_info,
             verify::use_verify_signature,
+            xlsx::create_xlsx,
             lib::close_app,
             window::app_ready,
         ])
