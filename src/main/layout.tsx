@@ -1,13 +1,18 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { UserOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Layout, Menu, theme } from 'antd'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { rootPath, writepath } from './router/RouterComponent'
+import dayjs from 'dayjs'
+import styles from './layout.module.scss'
+import clsx from 'clsx'
 
 const { Content, Sider } = Layout
 
 const LayoutCom: React.FC = () => {
+  const [collapsed, setCollapsed] = useState(true)
+
   const nav = useNavigate()
   const itemsObj = useMemo(
     () => [
@@ -43,9 +48,21 @@ const LayoutCom: React.FC = () => {
   } = theme.useToken()
 
   return (
-    <Layout hasSider>
-      <Sider>
-        <div className="demo-logo-vertical" />
+    <Layout hasSider className={styles.root}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
+        <div className="logo-box">
+          <div className="demo-logo-vertical" />
+          <div className={clsx('logo-info', !collapsed && 'logo-info-flex')}>
+            <div className="user-name">XXXXXXXXXXXXXXXXXXXX</div>
+            <div className="user-date">
+              {dayjs().format('YYYY MM-DDTHH:mm')}
+            </div>
+          </div>
+        </div>
         <Menu
           theme="dark"
           mode="inline"

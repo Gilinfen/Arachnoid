@@ -1,7 +1,7 @@
 # main.py
 
 import sys
-# from utils.license_verification import verify_license
+# from license_verification import verify_license
 from utils.handleProduct import copy_files_to_new_folders
 from utils.create_xls import create_xls_with_dropdown
 

@@ -4,16 +4,21 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
-# 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
+
 jobs:
   release:
     permissions:
       contents: write
+    runs-on: ${{ matrix.platform }}
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, windows-latest]
-    runs-on: ${{ matrix.platform }}
+        include:
+          - platform: windows-latest
+            architecture: x86
+          - platform: windows-latest
+            architecture: x64
+          - platform: macos-latest
 
     steps:
       - name: Checkout repository

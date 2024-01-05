@@ -1,0 +1,52 @@
+.root {
+  -webkit-user-select: none;
+  user-select: none;
+  :global {
+    .ant-layout-sider-trigger {
+      -webkit-user-select: none;
+      user-select: none;
+      border-bottom-left-radius: 10px;
+    }
+    .logo-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      float: left;
+      overflow: hidden;
+      padding: 10px;
+      .demo-logo-vertical {
+        width: 60px;
+        height: 50px;
+        border-radius: 8px;
+        background-color: #364452;
+        cursor: pointer;
+      }
+      .logo-info {
+        display: none;
+        width: calc(200px - 60px - 10px);
+        height: 50px;
+        margin-left: 4px;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        color: #fff;
+        overflow: hidden;
+        opacity: 0;
+        .user-name {
+          width: 100%;
+          font-size: large;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .user-date {
+          width: 100%;
+        }
+      }
+      .logo-info-flex {
+        display: flex;
+        opacity: 1;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+}

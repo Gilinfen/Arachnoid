@@ -1,14 +1,21 @@
 .root {
+  --border: 0px;
+  --height: 30px;
+  --bor-color: #000000;
+  --theme-color: #041527;
   border-radius: 10px;
   overflow: hidden;
+  border: var(--border) solid var(--bor-color);
+
   :global {
     .header {
       display: flex;
       user-select: none;
       width: 100%;
-      height: 30px;
-      background: #ffffff;
+      height: var(--height);
+      background: var(--theme-color);
       justify-content: space-between;
+      border-bottom: var(--border) solid var(--bor-color);
     }
     .controls {
       display: flex;
@@ -57,10 +64,11 @@
       align-items: center;
       flex: 1;
       font-weight: bold;
+      color: #fff;
     }
     .context {
       background-color: #fff;
-      height: calc(100vh - 30px);
+      height: calc(100vh - var(--height) - calc(3 * var(--border)));
     }
   }
 }

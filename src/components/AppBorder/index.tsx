@@ -1,5 +1,4 @@
 import { tyInvoke } from '../../invoke'
-import style from './index.module.scss'
 import { appWindow } from '@tauri-apps/api/window'
 import { app } from '@tauri-apps/api'
 import { useEffect, useState } from 'react'
@@ -10,6 +9,7 @@ import {
   MinusOutlined,
 } from '@ant-design/icons'
 import clsx from 'clsx'
+import style from './index.module.scss'
 
 export default function AppBorder({ children }: any) {
   const [appName, setAppName] = useState('')
