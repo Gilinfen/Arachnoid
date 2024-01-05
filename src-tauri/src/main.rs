@@ -15,6 +15,7 @@ mod python;
 mod utils;
 use dotenv::dotenv;
 
+use crate::python::py_start::unzip_python;
 fn main() {
     dotenv().ok(); // 加载 .env 文件
 
@@ -40,6 +41,7 @@ fn main() {
                 app,
                 |val1| {
                     println!("首次执行安装");
+                    let _ = unzip_python();
                     // 初始化 settings
                     config::init_settings(&val1.handle());
                 },
