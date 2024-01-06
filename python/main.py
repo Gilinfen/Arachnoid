@@ -1,5 +1,4 @@
 import sys
-# from license_verification import verify_license
 
 def main():
     # 检查参数数量
@@ -8,14 +7,6 @@ def main():
         # 在这里可以放置默认操作
         return
     
-    #     print("Usage: python main.py [app1|app2] [license_key]")
-    #     sys.exit(1)
-
-    # license_key = sys.argv[2]
-    # if not verify_license(license_key):
-    #     print("Invalid or expired license key. Access denied.")
-    #     sys.exit(1)
-
     print(sys.argv)
     if sys.argv[1] == 'app1':
         print("Running app1")
